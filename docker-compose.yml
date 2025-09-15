@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   conci_api:
-    image: conci_gca:pymssql   # se você buildou no Portainer com essa tag, use igual
+    image: conci-api:latest   # se você buildou no Portainer com essa tag, use igual
     environment:
       - DB_SERVER=138.0.160.201
       - DB_NAME=ErCardGCAD1
