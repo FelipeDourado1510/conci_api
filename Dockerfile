@@ -1,6 +1,5 @@
 FROM python:3.11-slim
 
-# Evita perguntas interativas durante instalação
 ENV DEBIAN_FRONTEND=noninteractive
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
@@ -13,25 +12,27 @@ RUN apt-get update && apt-get install -y \
     unixodbc-dev \
     gcc \
     g++ \
-    pkg-config \
-    && rm -rf /var/lib/apt/lists/* \
-    && apt-get clean
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Cria diretório de trabalho
 WORKDIR /app
 
-# Copia e instala dependências Python
-COPY requirements.txt .
-RUN pip install --no-cache-dir --upgrade pip
-RUN pip install --no-cache-dir -r requirements.txt
+# Instala dependências Python diretamente
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir \
+    Flask==2.3.3 \
+    gunicorn==21.2.0 \
+    SQLAlchemy==2.0.21 \
+    pandas==2.1.1 \
+    pymssql==2.2.8
 
 # Copia código da aplicação
 COPY . .
 
-# Cria diretório para arquivos e define permissões
+# Cria diretório para arquivos
 RUN mkdir -p /data && chmod 755 /data
 
-# Cria volume
+# Volume
 VOLUME ["/data"]
 
 # Expõe porta
