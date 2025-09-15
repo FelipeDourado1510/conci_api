@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  conci_api:
+    image: conci_gca:pymssql   # se você buildou no Portainer com essa tag, use igual
+    environment:
+      - DB_SERVER=138.0.160.201
+      - DB_NAME=ErCardGCAD1
+      - DB_USER=d1.devee
+      - PASTA_ARQUIVOS=/data
+    secrets:
+      - db_password
+    networks:
+      - internal_net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+networks:
+  internal_net:
+    driver: overlay
+    attachable: true
+
+secrets:
+  db_password:
+    external: true
